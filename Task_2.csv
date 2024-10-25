@@ -1,0 +1,9 @@
+animal,repeat_purchase,avg_sales,min_sales,max_sales
+Fish,1,693,287,1301
+Bird,0,1380,858,2255
+Dog,0,1084,574,1795
+Dog,1,1038,574,1797
+Cat,0,1035,512,1730
+Bird,1,1408,853,2256
+Fish,0,705,288,1307
+Cat,1,998,512,1724
