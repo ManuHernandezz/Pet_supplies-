@@ -113,9 +113,15 @@ Write a query to return the product_id, sales and rating for the relevant produc
 
 You should use the original pet_supplies data for this task.
 
-	select product_id, rating, sales
+	SELECT product_id, sales, rating
+	FROM pet_supplies
+	WHERE product_id IN(
+		SELECT product_id
 		FROM pet_supplies
-	WHERE animal IN ('Dog', 'Cat')
-	GROUP BY product_id, rating, sales
-	ORDER BY SALES DESC
+		WHERE 
+			(animal = 'Cat' OR animal = 'Dog')
+		AND repeat_purchase = 1
+		)
+	ORDER BY
+	sales DESC;
 
