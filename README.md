@@ -46,3 +46,48 @@ Do not update the original table.
 | sales | Continuous. The value of all sales of the product in the last year. This can be any positive value, rounded to 2 decimal places. </br>Missing values should be replaced with the overall median sales. |
 | rating | Discrete. Customer rating of the product from 1 to 10. </br>Missing values should be replaced with 0. |
 | repeat_purchase | Nominal. Whether customers repeatedly buy the product (1) or not (0). </br>Missing values should be removed. |
+
+    WITH SalesMedian AS (
+      SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY sales) AS median_sales
+      FROM pet_supplies
+      WHERE sales IS NOT NULL
+    ),
+    ValidPrices AS (
+      SELECT
+          product_id,
+          CASE
+              WHEN price ~ '^[0-9]+(\.[0-9]{1,2})?$' THEN ROUND(CAST(price AS NUMERIC), 2)
+              ELSE NULL
+          END AS price,
+          COALESCE(rating, 0) AS rating,
+          CASE
+              WHEN category = '-' THEN 'Unknown'
+              WHEN COALESCE(category, 'Unknown') NOT IN ('Housing', 'Food', 'Toys', 'Equipment', 'Medicine', 'Accessory')
+              THEN 'Unknown'
+              ELSE category
+          END AS category,
+          CASE
+              WHEN COALESCE(size, 'Unknown') NOT IN ('Small', 'Medium', 'Large')
+              THEN 'Unknown'
+              ELSE size
+          END AS size,
+          COALESCE(animal, 'Unknown') AS animal,
+          COALESCE(sales, (SELECT median_sales FROM SalesMedian)) AS sales,
+		  COALESCE (rating, 0) AS rating2,
+		  repeat_purchase
+      FROM pet_supplies
+    )
+    SELECT 
+      product_id,
+      category,
+      animal,
+      size,
+      COALESCE(price, 0) AS price,
+      sales,
+	  rating2 AS rating,
+	  repeat_purchase
+    FROM ValidPrices
+    WHERE repeat_purchase IN (1,0)
+
+
+
