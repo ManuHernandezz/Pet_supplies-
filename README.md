@@ -89,5 +89,33 @@ Do not update the original table.
     FROM ValidPrices
     WHERE repeat_purchase IN (1,0)
 
+# Task 2
+You want to show whether sales are higher for repeat purchases for different animals. You also want to give a range for the sales.
 
+Write a query to return the animal, repeat_purchase indicator and the avg_sales, along with the min_sales and max_sales. All values should be rounded to whole numbers.
+
+You should use the original pet_supplies data for this task
+
+	SELECT 
+		animal,
+   	  	repeat_purchase,
+   		ROUND(AVG(CAST(sales AS INTEGER))) AS avg_sales,
+    		ROUND(MIN(CAST(sales AS INTEGER))) AS min_sales,
+    		ROUND(MAX(CAST(sales AS INTEGER))) AS max_sales
+	FROM pet_supplies
+	GROUP BY animal, repeat_purchase;
+
+# Task 3
+
+The management team want to focus on efforts in the next year on the most popular pets - cats and dogs - for products that are bought repeatedly.
+
+Write a query to return the product_id, sales and rating for the relevant products.
+
+You should use the original pet_supplies data for this task.
+
+	select product_id, rating, sales
+		FROM pet_supplies
+	WHERE animal IN ('Dog', 'Cat')
+	GROUP BY product_id, rating, sales
+	ORDER BY SALES DESC
 
