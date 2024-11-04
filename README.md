@@ -47,6 +47,7 @@ Do not update the original table.
 | rating | Discrete. Customer rating of the product from 1 to 10. </br>Missing values should be replaced with 0. |
 | repeat_purchase | Nominal. Whether customers repeatedly buy the product (1) or not (0). </br>Missing values should be removed. |
 
+```sql
     WITH SalesMedian AS (
       SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY sales) AS median_sales
       FROM pet_supplies
@@ -88,13 +89,15 @@ Do not update the original table.
 	  repeat_purchase
     FROM ValidPrices
     WHERE repeat_purchase IN (1,0)
-
+ 
+```
 # Task 2
 You want to show whether sales are higher for repeat purchases for different animals. You also want to give a range for the sales.
 
 Write a query to return the animal, repeat_purchase indicator and the avg_sales, along with the min_sales and max_sales. All values should be rounded to whole numbers.
 
 You should use the original pet_supplies data for this task
+```sql
 
 	SELECT 
 		animal,
@@ -104,7 +107,8 @@ You should use the original pet_supplies data for this task
     		ROUND(MAX(CAST(sales AS INTEGER))) AS max_sales
 	FROM pet_supplies
 	GROUP BY animal, repeat_purchase;
-
+   
+```
 # Task 3
 
 The management team want to focus on efforts in the next year on the most popular pets - cats and dogs - for products that are bought repeatedly.
@@ -112,7 +116,8 @@ The management team want to focus on efforts in the next year on the most popula
 Write a query to return the product_id, sales and rating for the relevant products.
 
 You should use the original pet_supplies data for this task.
-
+```sql
+   
 	SELECT product_id, sales, rating
 	FROM pet_supplies
 	WHERE product_id IN(
@@ -125,3 +130,5 @@ You should use the original pet_supplies data for this task.
 	ORDER BY
 	sales DESC;
 
+   
+```
